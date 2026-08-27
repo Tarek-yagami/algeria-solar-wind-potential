@@ -84,4 +84,25 @@ reports/                 # final write-up / figures
 
 ## Status
 
-Data acquisition in progress. Next: EDA notebook.
+- [x] Data acquisition — 20 years daily, 13 sites, zero missing values
+- [x] EDA — [notebooks/01_eda.ipynb](notebooks/01_eda.ipynb)
+- [ ] Clustering — site typology
+- [ ] Regression / forecasting
+- [ ] Write-up
+
+### Key EDA findings
+
+- **Clearness index rises and stabilizes south**: ~0.80–0.85 on the coast
+  vs. ~0.93–0.95 in the deep Sahara, with interannual variability
+  dropping from 2%+ CV to under 1% — the south isn't just sunnier, it's
+  more predictable year over year.
+- **Solar/wind complementarity flips sign north to south** (see
+  [reports/figures/solar_wind_complementarity.png](reports/figures/solar_wind_complementarity.png)):
+  strongly negative on the coast/plateau (wind compensates for weak
+  solar months — a real hybrid-plant hedge) to strongly positive in the
+  Sahara (wind and solar peak together — a hybrid plant there adds
+  capacity, not risk diversification).
+- **Raw solar ranking ≠ usable solar ranking**: Adrar has the 2nd-highest
+  GHI of all 13 sites but 87 days/year above 35°C, enough to meaningfully
+  derate real PV yield — while Tamanrasset, the single highest-GHI site,
+  sees zero days over 35°C in this dataset.
