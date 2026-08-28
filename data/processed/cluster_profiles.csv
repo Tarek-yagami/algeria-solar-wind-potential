@@ -1,0 +1,5 @@
+cluster,ALLSKY_SFC_SW_DWN,WS50M,mean_kt,interannual_cv_pct,solar_wind_monthly_corr,hot_days_per_year,n_sites,sites,cluster_name
+0,4.94,5.468,0.826,2.09,-0.741,0.1,5,"Annaba, Algiers, Oran, Batna, Tiaret",Coast & Plateau (hybrid hedge)
+1,5.978,5.894,0.937,0.917,0.499,17.963,4,"Ghardaia, Ouargla, Bechar, Tamanrasset",Deep Sahara (high resource & aligned)
+2,5.542,6.354,0.89,1.33,-0.333,0.4,3,"Djelfa, Laghouat, El Bayadh",Saharan Atlas transition
+3,6.084,6.642,0.953,0.876,0.567,87.25,1,Adrar,Adrar (heat-risk outlier)

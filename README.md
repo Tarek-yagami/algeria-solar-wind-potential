@@ -89,17 +89,39 @@ top to bottom; the repo already ships the executed versions with all
 outputs and figures, so this step is only needed to regenerate results
 from scratch.
 
+## Interactive Dashboard
+
+A Streamlit app for exploring the results without reading through
+notebook cells: a map of the 13 sites colored by cluster with a
+per-site detail panel, a cluster-profile comparison view, and a
+forecasting tab (MAE by method, actual-vs-forecast by year, for both
+Algiers and Ouargla).
+
+```bash
+pip install -r requirements.txt
+python src/export_app_data.py   # only needed once, to (re)generate data/processed/*.csv for the app
+streamlit run app.py
+```
+
+The app only reads precomputed CSVs (produced by
+[src/export_app_data.py](src/export_app_data.py), which mirrors the
+exact logic in notebooks 02 and 03), it never retrains anything live,
+so it stays fast and its numbers never drift from what the notebooks
+and write-up report.
+
 ## Repo structure
 
 ```
 data/
   locations.csv          # the 13 sites and their coordinates/climate zone
   raw/                   # cached raw API JSON per location (gitignored)
-  processed/             # tidy combined CSV used for analysis
+  processed/             # tidy combined CSV used for analysis + app data
 notebooks/               # EDA, clustering, forecasting notebooks (executed)
 src/
   fetch_power_data.py    # data acquisition script
+  export_app_data.py     # regenerates the CSVs app.py reads
 reports/                 # final write-up / figures
+app.py                   # Streamlit dashboard
 requirements.txt         # pinned dependencies
 ```
 
