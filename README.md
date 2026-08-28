@@ -45,7 +45,7 @@ Fetched via [src/fetch_power_data.py](src/fetch_power_data.py); raw
 per-location JSON is cached in `data/raw/`, combined tidy data lands in
 `data/processed/power_daily_algeria.csv`.
 
-## Planned methodology
+## Methodology
 
 1. **EDA & feature engineering**: clearness index (all-sky/clear-sky
    GHI), degree-day-style temperature aggregates, seasonal decomposition
@@ -69,17 +69,38 @@ per-location JSON is cached in `data/raw/`, combined tidy data lands in
    limits (satellite-derived data vs. ground-truth pyranometer
    measurements, no grid-connection or land-use constraints modeled).
 
+## Setup / Reproduce
+
+```bash
+pip install -r requirements.txt
+
+# 1. Pull the 20-year climate dataset (takes a few minutes, hits the
+#    free NASA POWER API, no key needed)
+python src/fetch_power_data.py --start 20040101 --end 20231231
+
+# 2. Run the notebooks in order (each reads the previous step's output)
+jupyter nbconvert --to notebook --execute --inplace notebooks/01_eda.ipynb
+jupyter nbconvert --to notebook --execute --inplace notebooks/02_clustering.ipynb
+jupyter nbconvert --to notebook --execute --inplace notebooks/03_forecasting.ipynb
+```
+
+Or just open the `.ipynb` files in Jupyter/VS Code and run them
+top to bottom; the repo already ships the executed versions with all
+outputs and figures, so this step is only needed to regenerate results
+from scratch.
+
 ## Repo structure
 
 ```
 data/
   locations.csv          # the 13 sites and their coordinates/climate zone
-  raw/                   # cached raw API JSON per location
+  raw/                   # cached raw API JSON per location (gitignored)
   processed/             # tidy combined CSV used for analysis
-notebooks/               # EDA, modeling, clustering notebooks
+notebooks/               # EDA, clustering, forecasting notebooks (executed)
 src/
   fetch_power_data.py    # data acquisition script
 reports/                 # final write-up / figures
+requirements.txt         # pinned dependencies
 ```
 
 ## Status
