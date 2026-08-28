@@ -1,5 +1,5 @@
 # %% [markdown]
-# # EDA — Solar & Wind Resource Across Algeria's Climate Zones
+# # EDA: Solar & Wind Resource Across Algeria's Climate Zones
 #
 # Question this notebook starts to answer: **do the 13 sites actually
 # separate into meaningfully different renewable profiles, and what drives
@@ -38,12 +38,12 @@ print(df.shape)
 df.head()
 
 # %% [markdown]
-# ## 1. Clearness index — how predictable is the solar resource?
+# ## 1. Clearness index: how predictable is the solar resource?
 #
 # `ALLSKY_SFC_SW_DWN / CLRSKY_SFC_SW_DWN` measures how much cloud cover
 # actually knocks down irradiance relative to a cloudless sky. A site
 # stuck at ~0.55 has structurally cloudy weather; a site at ~0.75+ is
-# close to its physical ceiling most days — which matters more for
+# close to its physical ceiling most days, which matters more for
 # "bankability" than raw average irradiance alone.
 
 # %%
@@ -117,7 +117,7 @@ plt.show()
 # %% [markdown]
 # ## 3. Seasonal profiles by zone
 #
-# Averaging sites within each hand-labeled zone, month by month — this is
+# Averaging sites within each hand-labeled zone, month by month. This is
 # the first check on whether "zone" is doing real work or is just a label.
 
 # %%
@@ -149,7 +149,7 @@ plt.savefig(f"{FIG_DIR}/seasonal_profiles_by_zone.png", dpi=150)
 plt.show()
 
 # %% [markdown]
-# ## 4. Interannual variability — is a good year repeatable?
+# ## 4. Interannual variability: is a good year repeatable?
 #
 # Average clearness index per site *per year*, then look at the spread
 # across the 20 years. A site with a high mean but wide year-to-year
@@ -227,7 +227,7 @@ plt.savefig(f"{FIG_DIR}/solar_wind_complementarity.png", dpi=150)
 plt.show()
 
 # %% [markdown]
-# ## 6. Heat exposure — a PV-derating signal
+# ## 6. Heat exposure: a PV-derating signal
 #
 # PV panel efficiency drops as cell temperature rises above ~25°C.
 # Counting days over 35°C air temperature is a rough proxy for which
@@ -274,7 +274,7 @@ summary
 # 1. **The zone labels are real, not decorative.** Clearness index rises
 #    almost monotonically from ~0.80–0.85 on the coast to ~0.93–0.95 deep
 #    in the Sahara, and interannual variability drops from ~2%+ CV on the
-#    coast/plateau to under 1% in the desert — the Sahara isn't just
+#    coast/plateau to under 1% in the desert. The Sahara isn't just
 #    sunnier, it's also structurally more *predictable* year over year,
 #    which matters as much as raw resource strength for a 25-year asset.
 #
@@ -282,7 +282,7 @@ summary
 #    plateau sites show strong *negative* solar–wind correlation
 #    (Annaba −0.86, Tiaret −0.83, Algiers −0.74): wind climatologically
 #    compensates for weaker solar months, a real hybrid-plant hedging
-#    argument. Deep-Sahara sites show the opposite — *positive*
+#    argument. Deep-Sahara sites show the opposite: *positive*
 #    correlation (Béchar +0.80, Ouargla +0.73, Adrar +0.57): wind and
 #    solar peak in the same months there, so a hybrid plant adds capacity
 #    without reducing seasonal variability. This is a genuinely
@@ -291,14 +291,14 @@ summary
 #
 # 3. **Raw solar ranking is not the same as usable solar ranking.** Adrar
 #    has the 2nd-highest GHI of all 13 sites but also 87 days/year above
-#    35°C — enough heat exposure to meaningfully derate real-world PV
+#    35°C, enough heat exposure to meaningfully derate real-world PV
 #    yield (panel efficiency drops with cell temperature). Tamanrasset,
 #    the single highest-GHI site, sees *zero* days over 35°C in this
-#    dataset, despite being further south — a coastal-vs-continental /
+#    dataset, despite being further south, a coastal-vs-continental /
 #    altitude effect worth digging into rather than assuming "further
 #    south = hotter."
 #
 # These three points are exactly what the clustering stage (next
 # notebook) needs to test formally: do sites group along resource
-# strength, or does variability/complementarity/heat produce a different
-# — and more decision-relevant — typology?
+# strength, or does variability/complementarity/heat produce a different,
+# more decision-relevant typology?
