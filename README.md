@@ -111,6 +111,17 @@ its feature engineering and model code with notebooks 02 and 03 (via
 anything live and its numbers can't drift from what the notebooks and
 write-up report.
 
+## Tests
+
+`src/clustering.py` and `src/forecasting.py` are covered by unit tests
+(feature engineering, the AR(1) baseline, cluster config), since both
+notebooks and the export script depend on them being correct.
+
+```bash
+pip install -r requirements.txt
+pytest
+```
+
 ## Repo structure
 
 ```
@@ -124,8 +135,10 @@ src/
   clustering.py          # shared clustering config (notebook 02 + export script)
   forecasting.py         # shared feature engineering & model defs (notebook 03 + export script)
   export_app_data.py     # regenerates the CSVs app.py reads
+tests/                   # unit tests for src/clustering.py and src/forecasting.py
 reports/                 # final write-up / figures
 app.py                   # Streamlit dashboard
+conftest.py              # lets tests import the src/ package
 requirements.txt         # pinned dependencies
 ```
 
