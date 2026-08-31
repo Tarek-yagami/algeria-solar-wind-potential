@@ -103,11 +103,13 @@ python src/export_app_data.py   # only needed once, to (re)generate data/process
 streamlit run app.py
 ```
 
-The app only reads precomputed CSVs (produced by
-[src/export_app_data.py](src/export_app_data.py), which mirrors the
-exact logic in notebooks 02 and 03), it never retrains anything live,
-so it stays fast and its numbers never drift from what the notebooks
-and write-up report.
+The app only reads precomputed CSVs, produced by
+[src/export_app_data.py](src/export_app_data.py). That script shares
+its feature engineering and model code with notebooks 02 and 03 (via
+[src/clustering.py](src/clustering.py) and
+[src/forecasting.py](src/forecasting.py)), so the app never retrains
+anything live and its numbers can't drift from what the notebooks and
+write-up report.
 
 ## Repo structure
 
