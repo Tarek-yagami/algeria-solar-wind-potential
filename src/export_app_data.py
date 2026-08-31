@@ -29,7 +29,6 @@ PROCESSED = ROOT / "data" / "processed"
 # Clustering (mirrors notebooks/02_clustering.ipynb)
 # ---------------------------------------------------------------------------
 print("Clustering...")
-locations = pd.read_csv(ROOT / "data" / "locations.csv")
 summary = pd.read_csv(PROCESSED / "site_summary_features.csv", index_col=0)
 
 CLUSTER_FEATURES = [
