@@ -1,5 +1,6 @@
 # Where Should Algeria Build Solar and Wind Capacity?
 
+[![Tests](https://github.com/Tarek-yagami/algeria-solar-wind-potential/actions/workflows/tests.yml/badge.svg)](https://github.com/Tarek-yagami/algeria-solar-wind-potential/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A resource-assessment and profiling study of renewable energy potential
