@@ -1,9 +1,10 @@
 """
 Re-runs the clustering and forecasting logic from notebooks 02 and 03
-and saves lightweight CSV exports for the Streamlit app (app.py) to
-load. The app itself never touches sklearn/statsmodels/tensorflow; it
-only reads these precomputed files, so it stays fast and has no
-retraining non-determinism.
+(via src/clustering.py and src/forecasting.py, which both the notebooks
+and this script import) and saves lightweight CSV exports for the
+Streamlit app (app.py) to load. The app itself never touches
+sklearn/statsmodels/tensorflow; it only reads these precomputed files,
+so it stays fast and has no retraining non-determinism.
 
 Usage:
     python src/export_app_data.py
@@ -22,6 +23,12 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.preprocessing import StandardScaler
 
+from clustering import CLUSTER_FEATURES, CLUSTER_NAMES, N_CLUSTERS
+from forecasting import (
+    FEATURE_COLS, GBR_PARAMS, LSTM_WINDOW, SITES, TRAIN_END,
+    build_features, build_lstm_model, fit_ar1,
+)
+
 ROOT = Path(__file__).resolve().parent.parent
 PROCESSED = ROOT / "data" / "processed"
 
@@ -31,25 +38,15 @@ PROCESSED = ROOT / "data" / "processed"
 print("Clustering...")
 summary = pd.read_csv(PROCESSED / "site_summary_features.csv", index_col=0)
 
-CLUSTER_FEATURES = [
-    "ALLSKY_SFC_SW_DWN", "WS50M", "mean_kt",
-    "interannual_cv_pct", "solar_wind_monthly_corr", "hot_days_per_year",
-]
 X_scaled = StandardScaler().fit_transform(summary[CLUSTER_FEATURES])
 
-hier = AgglomerativeClustering(n_clusters=4, linkage="ward").fit(X_scaled)
+hier = AgglomerativeClustering(n_clusters=N_CLUSTERS, linkage="ward").fit(X_scaled)
 summary["cluster"] = hier.labels_
 
 pca = PCA(n_components=2)
 coords = pca.fit_transform(X_scaled)
 summary["pc1"], summary["pc2"] = coords[:, 0], coords[:, 1]
 
-CLUSTER_NAMES = {
-    0: "Coast & Plateau (hybrid hedge)",
-    1: "Deep Sahara (high resource & aligned)",
-    2: "Saharan Atlas transition",
-    3: "Adrar (heat-risk outlier)",
-}
 summary["cluster_name"] = summary["cluster"].map(CLUSTER_NAMES)
 
 site_clusters = summary.reset_index().rename(columns={"index": "name"})
@@ -70,31 +67,6 @@ print("Forecasting...")
 df = pd.read_csv(PROCESSED / "power_daily_algeria.csv", parse_dates=["date"])
 df["kt"] = df["ALLSKY_SFC_SW_DWN"] / df["CLRSKY_SFC_SW_DWN"]
 
-SITES = ["Algiers", "Ouargla"]
-TRAIN_END = "2019-12-31"
-
-
-def build_features(site_df):
-    d = site_df.sort_values("date").reset_index(drop=True).copy()
-    d["doy"] = d["date"].dt.dayofyear
-    d["doy_sin"] = np.sin(2 * np.pi * d["doy"] / 366)
-    d["doy_cos"] = np.cos(2 * np.pi * d["doy"] / 366)
-    for lag in [1, 2, 3, 7]:
-        d[f"kt_lag{lag}"] = d["kt"].shift(lag)
-    d["kt_roll7_mean"] = d["kt"].shift(1).rolling(7).mean()
-    d["kt_roll30_mean"] = d["kt"].shift(1).rolling(30).mean()
-    train_mask = d["date"] <= TRAIN_END
-    clim = d.loc[train_mask].groupby("doy")["kt"].mean().rename("kt_climatology")
-    d = d.merge(clim, on="doy", how="left")
-    return d.dropna().reset_index(drop=True)
-
-
-FEATURE_COLS = [
-    "kt_lag1", "kt_lag2", "kt_lag3", "kt_lag7",
-    "kt_roll7_mean", "kt_roll30_mean",
-    "doy_sin", "doy_cos", "kt_climatology",
-]
-
 site_data = {site: build_features(df[df["name"] == site]) for site in SITES}
 
 metrics_rows = []
@@ -108,15 +80,12 @@ for site in SITES:
     train = d[d["date"] <= TRAIN_END]
     test = d[d["date"] > TRAIN_END]
 
-    phi = np.corrcoef(train["anomaly_lag1"], train["anomaly"])[0, 1] * (
-        train["anomaly"].std() / train["anomaly_lag1"].std()
-    )
-    ar1_pred = test["kt_climatology"] + phi * test["anomaly_lag1"]
+    ar1_pred, _phi = fit_ar1(train, test)
 
     X_train, y_train = train[FEATURE_COLS], train["kt"]
     X_test, y_test = test[FEATURE_COLS], test["kt"]
 
-    gbr = GradientBoostingRegressor(n_estimators=300, max_depth=3, learning_rate=0.05, random_state=0)
+    gbr = GradientBoostingRegressor(**GBR_PARAMS)
     gbr.fit(X_train, y_train)
     gbr_pred = gbr.predict(X_test)
 
@@ -148,14 +117,13 @@ for site in SITES:
 print("Training LSTM for Algiers (one run, cached for the app)...")
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras import layers
 
 tf.config.threading.set_intra_op_parallelism_threads(1)
 tf.config.threading.set_inter_op_parallelism_threads(1)
 tf.random.set_seed(0)
 np.random.seed(0)
 
-WINDOW = 30
+WINDOW = LSTM_WINDOW
 d = site_data["Algiers"]
 kt_vals = d["kt"].values
 aux_vals = d[["doy_sin", "doy_cos", "kt_climatology"]].values
@@ -177,14 +145,7 @@ train_mask = seq_dates <= "2017-12-31"
 val_mask = (seq_dates > "2017-12-31") & (seq_dates <= TRAIN_END)
 test_mask = seq_dates > TRAIN_END
 
-seq_input = keras.Input(shape=(WINDOW, 1))
-x = layers.LSTM(32)(seq_input)
-aux_input = keras.Input(shape=(3,))
-combined = layers.concatenate([x, aux_input])
-combined = layers.Dense(16, activation="relu")(combined)
-output = layers.Dense(1)(combined)
-lstm_model = keras.Model([seq_input, aux_input], output)
-lstm_model.compile(optimizer="adam", loss="mse")
+lstm_model = build_lstm_model(WINDOW, X_aux.shape[1])
 lstm_model.fit(
     [X_seq[train_mask], X_aux[train_mask]], y[train_mask],
     validation_data=([X_seq[val_mask], X_aux[val_mask]], y[val_mask]),

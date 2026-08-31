@@ -119,6 +119,8 @@ data/
 notebooks/               # EDA, clustering, forecasting notebooks (executed)
 src/
   fetch_power_data.py    # data acquisition script
+  clustering.py          # shared clustering config (notebook 02 + export script)
+  forecasting.py         # shared feature engineering & model defs (notebook 03 + export script)
   export_app_data.py     # regenerates the CSVs app.py reads
 reports/                 # final write-up / figures
 app.py                   # Streamlit dashboard
