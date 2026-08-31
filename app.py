@@ -17,6 +17,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
+from src.clustering import CLUSTER_NAMES
+
 st.set_page_config(page_title="Algeria Solar & Wind Siting", layout="wide")
 
 PROCESSED = "data/processed"
@@ -38,12 +40,8 @@ sites = data["sites"]
 cluster_profiles = data["cluster_profiles"]
 metrics = data["metrics"]
 
-CLUSTER_COLORS = {
-    "Coast & Plateau (hybrid hedge)": "#2471a3",
-    "Deep Sahara (high resource & aligned)": "#e67e22",
-    "Saharan Atlas transition": "#27ae60",
-    "Adrar (heat-risk outlier)": "#c0392b",
-}
+CLUSTER_COLOR_PALETTE = ["#2471a3", "#e67e22", "#27ae60", "#c0392b"]
+CLUSTER_COLORS = {CLUSTER_NAMES[i]: CLUSTER_COLOR_PALETTE[i] for i in sorted(CLUSTER_NAMES)}
 
 st.title("Where Should Algeria Build Solar and Wind Capacity?")
 st.caption(
