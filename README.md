@@ -1,5 +1,7 @@
 # Where Should Algeria Build Solar and Wind Capacity?
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A resource-assessment and profiling study of renewable energy potential
 across Algeria, using 20 years of satellite-derived climate data.
 
@@ -140,6 +142,7 @@ reports/                 # final write-up / figures
 app.py                   # Streamlit dashboard
 conftest.py              # lets tests import the src/ package
 requirements.txt         # pinned dependencies
+LICENSE                  # MIT
 ```
 
 ## Status
