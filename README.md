@@ -100,6 +100,8 @@ per-site detail panel, a cluster-profile comparison view, and a
 forecasting tab (MAE by method, actual-vs-forecast by year, for both
 Algiers and Ouargla).
 
+![Site map colored by cluster](reports/figures/dashboard_site_map.png)
+
 ```bash
 pip install -r requirements.txt
 python src/export_app_data.py   # only needed once, to (re)generate data/processed/*.csv for the app
