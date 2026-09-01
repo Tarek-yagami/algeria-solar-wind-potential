@@ -6,6 +6,8 @@
 A resource-assessment and profiling study of renewable energy potential
 across Algeria, using 20 years of satellite-derived climate data.
 
+**Live dashboard:** [algeria-solar-wind-potential.streamlit.app](https://algeria-solar-wind-potential.streamlit.app/)
+
 ## Problem Statement
 
 Algeria has announced a target of ~15,000 MW of solar capacity by 2035
@@ -100,7 +102,12 @@ per-site detail panel, a cluster-profile comparison view, and a
 forecasting tab (MAE by method, actual-vs-forecast by year, for both
 Algiers and Ouargla).
 
+**Try it live:** [algeria-solar-wind-potential.streamlit.app](https://algeria-solar-wind-potential.streamlit.app/)
+(free-tier hosting, so it may take ~30s to wake up if it's been idle).
+
 ![Site map colored by cluster](reports/figures/dashboard_site_map.png)
+
+To run it locally instead:
 
 ```bash
 pip install -r requirements.txt
