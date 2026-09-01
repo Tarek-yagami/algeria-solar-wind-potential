@@ -176,3 +176,11 @@ does not beat Gradient Boosting once tested fairly.
 
 Full findings, the four-cluster site typology, and limitations:
 **[reports/findings_report.md](reports/findings_report.md)**.
+
+## Possible Extensions
+
+A few directions this analysis could go next:
+
+- **Uncertainty bands on the forecasts.** The GBR and LSTM models currently output a single point forecast per day. Quantile regression or residual-based intervals would give a range instead, which matters more to a grid operator than a bare MAE number.
+- **Wind capacity factor instead of raw wind speed.** `WS50M` is a proxy for wind resource, but running it through a standard turbine power curve would give an actual capacity factor, tightening the hybrid-plant story in the clusters.
+- **A rough economic layer.** Right now the clusters answer "where is the resource good," not "where should you actually build." Adding a bankability proxy, like distance to the grid or to major load centers, would move the analysis a step closer to a real siting recommendation.
