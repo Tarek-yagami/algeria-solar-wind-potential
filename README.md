@@ -145,10 +145,12 @@ src/
   clustering.py          # shared clustering config (notebook 02 + export script)
   forecasting.py         # shared feature engineering & model defs (notebook 03 + export script)
   export_app_data.py     # regenerates the CSVs app.py reads
-tests/                   # unit tests for src/clustering.py and src/forecasting.py
+tests/
+  conftest.py            # lets tests import the src/ package
+  test_clustering.py     # unit tests for src/clustering.py
+  test_forecasting.py    # unit tests for src/forecasting.py
 reports/                 # final write-up / figures
 app.py                   # Streamlit dashboard
-conftest.py              # lets tests import the src/ package
 requirements.txt         # pinned dependencies
 LICENSE                  # MIT
 ```
