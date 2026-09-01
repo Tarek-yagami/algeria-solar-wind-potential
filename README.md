@@ -10,24 +10,22 @@ across Algeria, using 20 years of satellite-derived climate data.
 
 ## Problem Statement
 
-Algeria has announced a target of ~15,000 MW of solar capacity by 2035
-(the "Tafouk 1" program) and sits on some of the best solar resource in the
-world, yet solar still supplies well under 1% of national electricity.
-Site selection for that build-out isn't just "where is it sunniest": it
-depends on how *predictable* the resource is, how it varies seasonally,
-and whether pairing sites with complementary profiles (e.g. a volatile
-solar region with a steadier wind corridor) could reduce grid balancing
-risk.
+Algeria has announced a target of about 15,000 MW of solar capacity by
+2035 under the "Tafouk 1" program, and it sits on some of the best solar
+resource in the world. Yet solar still supplies well under 1% of
+national electricity today. Picking sites for that build-out depends on
+how predictable the resource is, how much it swings by season, and
+whether pairing a site's solar with wind actually reduces risk instead
+of just adding capacity in the same good and bad months.
 
-**Question:** Using historical solar irradiance, wind speed, and
-temperature data for a spread of Algerian locations (coast → high plateau
-→ Sahara), can we (1) forecast short-term resource variability, (2)
-quantify what drives that variability, and (3) group locations into
-distinct renewable profiles that are useful for site-selection reasoning?
+**Question:** Using 20 years of solar, wind, and temperature data across
+Algerian locations from the coast to the high plateau to the Sahara,
+this project asks whether we can forecast short-term resource
+variability, figure out what actually drives it, and group locations
+into renewable profiles useful for site selection.
 
-This deliberately does not require Algeria's grid operator (Sonelgaz) to
-publish anything. We model the *resource*, which is public satellite
-data, not the internal grid.
+This relies only on public satellite climate data, without the need for
+anything from Algeria's grid operator (Sonelgaz).
 
 ## Data
 
