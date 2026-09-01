@@ -93,7 +93,10 @@ with tab_map:
     c2.metric("Clearness index", f"{row['mean_kt']:.2f}")
     c3.metric("Wind speed at 50m (m/s)", f"{row['WS50M']:.2f}")
     c4.metric("Interannual variability", f"{row['interannual_cv_pct']:.2f}%")
-    c5.metric("Hot days/year (>35°C)", f"{row['hot_days_per_year']:.0f}")
+    c5.metric(
+        "Hot days/year (>35°C)", f"{row['hot_days_per_year']:.0f}",
+        help="Days per year where the *daily mean* temperature (not the daily high) exceeded 35°C.",
+    )
 
     corr = row["solar_wind_monthly_corr"]
     hedge = "hedges seasonal variability" if corr < -0.2 else (
@@ -122,7 +125,10 @@ with tab_clusters:
             c1.metric("Mean GHI", f"{prof['ALLSKY_SFC_SW_DWN']:.2f}")
             c2.metric("Clearness index", f"{prof['mean_kt']:.2f}")
             c3.metric("Solar/wind corr", f"{prof['solar_wind_monthly_corr']:.2f}")
-            c4.metric("Hot days/yr", f"{prof['hot_days_per_year']:.0f}")
+            c4.metric(
+                "Hot days/yr", f"{prof['hot_days_per_year']:.0f}",
+                help="Days per year where the *daily mean* temperature (not the daily high) exceeded 35°C.",
+            )
 
     col_pca, col_radar = st.columns(2)
 
@@ -181,7 +187,7 @@ with tab_clusters:
             "ALLSKY_SFC_SW_DWN": "Mean GHI (kWh/m²/day)", "WS50M": "Wind speed at 50m (m/s)",
             "mean_kt": "Clearness index", "interannual_cv_pct": "Interannual variability (%)",
             "solar_wind_monthly_corr": "Solar/wind monthly correlation",
-            "hot_days_per_year": "Hot days/year (>35°C)",
+            "hot_days_per_year": "Hot days/year (daily mean >35°C)",
         }[x],
     )
     fig_bar = px.bar(
