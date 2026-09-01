@@ -89,10 +89,22 @@ with tab_map:
     row = sites[sites["name"] == site_name].iloc[0]
 
     c1, c2, c3, c4, c5 = st.columns(5)
-    c1.metric("Mean GHI (kWh/m²/day)", f"{row['ALLSKY_SFC_SW_DWN']:.2f}")
-    c2.metric("Clearness index", f"{row['mean_kt']:.2f}")
-    c3.metric("Wind speed at 50m (m/s)", f"{row['WS50M']:.2f}")
-    c4.metric("Interannual variability", f"{row['interannual_cv_pct']:.2f}%")
+    c1.metric(
+        "Mean GHI (kWh/m²/day)", f"{row['ALLSKY_SFC_SW_DWN']:.2f}",
+        help="Average daily global horizontal irradiance (all-sky) over the 20-year record.",
+    )
+    c2.metric(
+        "Clearness index", f"{row['mean_kt']:.2f}",
+        help="Actual GHI divided by theoretical cloud-free GHI. Higher means clearer, more predictable skies.",
+    )
+    c3.metric(
+        "Wind speed at 50m (m/s)", f"{row['WS50M']:.2f}",
+        help="Average wind speed at 50 meters, a proxy for turbine hub height.",
+    )
+    c4.metric(
+        "Interannual variability", f"{row['interannual_cv_pct']:.2f}%",
+        help="Coefficient of variation in mean irradiance across years. Higher means less predictable year to year.",
+    )
     c5.metric(
         "Hot days/year (>35°C)", f"{row['hot_days_per_year']:.0f}",
         help="Days per year where the *daily mean* temperature (not the daily high) exceeded 35°C.",
@@ -122,9 +134,18 @@ with tab_clusters:
             st.markdown(f"### {prof['cluster_name']}")
             st.caption(f"Sites: {prof['sites']}  ·  n={int(prof['n_sites'])}")
             c1, c2, c3, c4 = st.columns(4)
-            c1.metric("Mean GHI", f"{prof['ALLSKY_SFC_SW_DWN']:.2f}")
-            c2.metric("Clearness index", f"{prof['mean_kt']:.2f}")
-            c3.metric("Solar/wind corr", f"{prof['solar_wind_monthly_corr']:.2f}")
+            c1.metric(
+                "Mean GHI", f"{prof['ALLSKY_SFC_SW_DWN']:.2f}",
+                help="Average daily global horizontal irradiance (all-sky, kWh/m²/day) over the 20-year record.",
+            )
+            c2.metric(
+                "Clearness index", f"{prof['mean_kt']:.2f}",
+                help="Actual GHI divided by theoretical cloud-free GHI. Higher means clearer, more predictable skies.",
+            )
+            c3.metric(
+                "Solar/wind corr", f"{prof['solar_wind_monthly_corr']:.2f}",
+                help="Monthly correlation between solar and wind resource. Negative means wind compensates for weak-solar months; positive means they peak together.",
+            )
             c4.metric(
                 "Hot days/yr", f"{prof['hot_days_per_year']:.0f}",
                 help="Days per year where the *daily mean* temperature (not the daily high) exceeded 35°C.",
